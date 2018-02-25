@@ -294,21 +294,17 @@ nav h1 a {
 
   #restaurants-list li {
     width: 33%;
+    flex-grow: 1;
   }
 
   .inside #map-container {
     width: 45%;
+    flex-grow: 1;
   }
 
   #restaurant-container {
     width: 44%;
     order: -1;
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  #restaurants-list li {
-    width: 23%;
   }
 
   #reviews-list {
@@ -317,7 +313,18 @@ nav h1 a {
   }
 
   #reviews-list li {
+    width: 44%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #restaurants-list li {
+    width: 23%;
+  }
+
+  #reviews-list li {
     width: 28%;
+    flex-grow: 1;
   }
 }
 
