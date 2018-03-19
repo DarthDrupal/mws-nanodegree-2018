@@ -285,6 +285,14 @@ nav h1 a {
   #map, .inside #map-container {
     height: 200px;
   }
+
+  #reviews-container {
+    padding: 30px 30px 80px;
+  }
+
+  #reviews-list article {
+    margin: 0 0 30px;
+  }
 }
 
 @media screen and (min-width: 601px) {
