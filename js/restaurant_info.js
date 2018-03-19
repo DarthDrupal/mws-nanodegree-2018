@@ -105,35 +105,35 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
+  const div = document.getElementById('reviews-list');
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    div.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
+  container.appendChild(div);
 }
 
 /**
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
-  const li = document.createElement('li');
+  const article = document.createElement('article');
   const name = document.createElement('p');
   name.innerHTML = review.name;
-  li.appendChild(name);
+  article.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
-  li.appendChild(date);
+  article.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
-  li.appendChild(rating);
+  article.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
-  li.appendChild(comments);
+  article.appendChild(comments);
 
-  return li;
+  return article;
 }
 
 /**
