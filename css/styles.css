@@ -139,7 +139,7 @@ nav h1 a {
   padding: 30px 15px 60px;
   text-align: center;
 }
-#restaurants-list li {
+#restaurants-list article {
   background-color: #fff;
   border: 2px solid #ccc;
   font-family: Arial,sans-serif;
@@ -154,10 +154,9 @@ nav h1 a {
   display: block;
   margin: 0;
   max-width: 100%;
-  min-height: 248px;
   min-width: 100%;
 }
-#restaurants-list li h1 {
+#restaurants-list article h1 {
   color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14pt;
@@ -171,7 +170,7 @@ nav h1 a {
   margin: 0;
   font-size: 11pt;
 }
-#restaurants-list li a {
+#restaurants-list article a {
   background-color: orange;
   border-bottom: 3px solid #eee;
   color: #fff;
@@ -262,23 +261,25 @@ nav h1 a {
   margin: 0;
   padding: 0;
 }
-#reviews-list li {
+#reviews-list article {
   background-color: #fff;
   border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
-  margin: 0 0 30px;
+  margin: 0 15px 30px;
   overflow: hidden;
   padding: 0 20px 20px;
   position: relative;
   /*width: 85%;*/
 }
-#reviews-list li p {
+#reviews-list article p {
   margin: 0 0 10px;
 }
 #restaurant-hours td {
   color: #666;
 }
+
+/* =============== Media queries breakpoints =============== */
 
 @media screen and (max-width: 600px) {
   #map, .inside #map-container {
@@ -292,14 +293,12 @@ nav h1 a {
     flex-wrap: wrap;
   }
 
-  #restaurants-list li {
-    width: 33%;
-    flex-grow: 1;
+  #restaurants-list article {
+    width: calc((100% - 188px)/2);
   }
 
   .inside #map-container {
     width: 45%;
-    flex-grow: 1;
   }
 
   #restaurant-container {
@@ -312,19 +311,18 @@ nav h1 a {
     flex-wrap: wrap;
   }
 
-  #reviews-list li {
-    width: 44%;
+  #reviews-list article {
+    width: calc((100% - 148px)/2);
   }
 }
 
 @media screen and (min-width: 1024px) {
-  #restaurants-list li {
-    width: 23%;
+  #restaurants-list article {
+    width: calc((100% - 282px)/3);
   }
 
-  #reviews-list li {
-    width: 28%;
-    flex-grow: 1;
+  #reviews-list article {
+    width: calc((100% - 222px)/3);
   }
 }
 
