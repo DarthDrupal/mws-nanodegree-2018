@@ -176,3 +176,5 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
+
+AppHelper.registerServiceWorker();
