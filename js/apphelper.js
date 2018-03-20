@@ -40,6 +40,9 @@ class AppHelper {
     });
   };
 
+  /**
+   * @description Method to track service worker states
+   */
   static trackInstalling(worker) {
     worker.addEventListener('statechange', function () {
       if (worker.state == 'installed') {
@@ -48,6 +51,9 @@ class AppHelper {
     });
   };
 
+  /**
+   * @description Method to skip the waiting for service worker update
+   */
   static updateReady(worker) {
     worker.postMessage({ action: 'skipWaiting' });
   };
