@@ -178,4 +178,12 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 }
 
+/**
+ * @description Register Service Worker
+ */
 AppHelper.registerServiceWorker();
+
+/**
+ * @description Fetch and update all restaurants from the network
+ */
+DBHelper.fetchRestaurants();
