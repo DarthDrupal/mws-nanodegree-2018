@@ -53,7 +53,7 @@ class DBHelper {
       });
       return console.log(data);
     }).catch((error) => {
-      console.log(`Request failed. Returned status of ${error.status}`);
+      return console.log(`Request failed. Returned status of ${error.status}`);
     });
   }
 
