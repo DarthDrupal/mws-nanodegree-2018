@@ -61,7 +61,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
-  image.alt = `Image for restaurant ${restaurant.name}`
+  image.alt = `Restaurant ${restaurant.name} in ${restaurant.neighborhood}. Cuisine type is ${restaurant.cuisine_type}`;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   const picture = document.getElementById('restaurant-pic');
@@ -103,7 +103,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -150,6 +150,7 @@ createReviewHTML = (review) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
+  li.setAttribute('aria-current', 'page');
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
 }
@@ -171,3 +172,8 @@ getParameterByName = (name, url) => {
 }
 
 AppHelper.registerServiceWorker();
+
+/**
+ * @description Fetch and update all restaurants from the network
+ */
+DBHelper.fetchRestaurants();
