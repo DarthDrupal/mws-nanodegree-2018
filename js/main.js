@@ -130,6 +130,9 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     div.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
+  var bLazy = new Blazy({
+    // Options
+  });
 }
 
 /**
@@ -139,9 +142,10 @@ createRestaurantHTML = (restaurant) => {
   const article = document.createElement('article');
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
+  image.className = 'restaurant-img b-lazy';
   image.alt = `Restaurant ${restaurant.name} in ${restaurant.neighborhood}. Cuisine type is ${restaurant.cuisine_type}`;
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  //image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.setAttribute("data-src", DBHelper.imageUrlForRestaurant(restaurant));
   article.append(image);
 
   const name = document.createElement('h3');
