@@ -1,8 +1,8 @@
 let restaurants,
   neighborhoods,
   cuisines
-var map
-var markers = []
+var mapUrl
+const mapApiKey = "AIzaSyAfn6irkVjamwVeR6wVnRJ7fzL4x2Mhb_8"
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -96,12 +96,16 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
+  // Using static google maps api to get better performances
+  // https://developers.google.com/maps/documentation/static-maps/intro
+  mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&zoom=11&center=40.722216,-73.987501&key=${mapApiKey}&markers=size:mid%7Ccolor:red`
+
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
       resetRestaurants(restaurants);
-      fillRestaurantsHTML();
+      fillRestaurantsHTML(restaurants);
     }
   })
 }
@@ -114,25 +118,24 @@ resetRestaurants = (restaurants) => {
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
   ul.innerHTML = '';
-
-  // Remove all map markers
-  self.markers.forEach(m => m.setMap(null));
-  self.markers = [];
-  self.restaurants = restaurants;
 }
 
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-fillRestaurantsHTML = (restaurants = self.restaurants) => {
+fillRestaurantsHTML = (restaurants) => {
   const div = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
     div.append(createRestaurantHTML(restaurant));
+    mapUrl += `%7C${restaurant.latlng.lat},${restaurant.latlng.lng}`;
   });
-  addMarkersToMap();
+
   var bLazy = new Blazy({
     // Options
   });
+
+  const mapImg = document.getElementById('map');
+  mapImg.src = mapUrl;
 }
 
 /**
@@ -144,7 +147,6 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img b-lazy';
   image.alt = `Restaurant ${restaurant.name} in ${restaurant.neighborhood}. Cuisine type is ${restaurant.cuisine_type}`;
-  //image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute("data-src", DBHelper.imageUrlForRestaurant(restaurant));
   article.append(image);
 
@@ -166,20 +168,6 @@ createRestaurantHTML = (restaurant) => {
   article.append(more)
 
   return article
-}
-
-/**
- * Add markers for current restaurants to the map.
- */
-addMarkersToMap = (restaurants = self.restaurants) => {
-  restaurants.forEach(restaurant => {
-    // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
-    });
-    self.markers.push(marker);
-  });
 }
 
 /**

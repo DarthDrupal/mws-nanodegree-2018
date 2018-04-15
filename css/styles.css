@@ -20,7 +20,7 @@ header h1 a {
 
 /* ====================== Map ====================== */
 #map {
-  height: 400px;
+  height: 100%;
   width: 100%;
   background-color: #ccc;
 }
@@ -111,9 +111,9 @@ header h1 a {
 /* =============== Media queries breakpoints =============== */
 
 @media screen and (max-width: 600px) {
-  #map, .inside #map-container {
+  /*#map, .inside #map-container {
     height: 200px;
-  }
+  }*/
 }
 
 @media screen and (min-width: 601px) {
