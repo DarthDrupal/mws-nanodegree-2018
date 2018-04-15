@@ -5,9 +5,63 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#3397DB" />
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="css/styles.css">
   <link rel="manifest" href="/manifest.json">
   <title>Restaurant Reviews</title>
+  <style>
+    body,td,th,p{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #333;
+      line-height: 1.5;
+    }
+    body {
+      background-color: #fdfdfd;
+      margin: 0;
+      position:relative;
+    }
+    ul, li {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #333;
+    }
+    a {
+      /*color: darkorange;*/
+      color: #DC143C;
+      text-decoration: none;
+    }
+    a:hover, a:focus {
+      /*color: #3397db;*/
+      color: #5EACE3;
+      text-decoration: none;
+    }
+    a img{
+      border: none 0px #fff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0 0 20px;
+    }
+    article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+      display: block;
+    }
+    #maincontent {
+      background-color: #f3f3f3;
+      min-height: 100%;
+    }
+    #footer {
+      background-color: #444;
+      color: #dbdbdb;
+      font-size: 8pt;
+      letter-spacing: 1px;
+      padding: 25px 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    #footer a {
+      color: #F598AD;
+    }
+  </style>
 </head>
 
 <body>
@@ -37,6 +91,22 @@
     </section>
   </main>
   
+  <noscript id="deferred-styles">
+    <link rel="stylesheet" href="css/styles.css">
+  </noscript>
+  <script>
+    var loadDeferredStyles = function () {
+      var addStylesNode = document.getElementById("deferred-styles");
+      var replacement = document.createElement("div");
+      replacement.innerHTML = addStylesNode.textContent;
+      document.body.appendChild(replacement)
+      addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) raf(function () { window.setTimeout(loadDeferredStyles, 0); });
+    else window.addEventListener('load', loadDeferredStyles);
+  </script>
   <!-- IndexDB Promise library - source: https://github.com/jakearchibald/idb -->
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
   <!-- Database helpers -->
