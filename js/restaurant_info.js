@@ -1,24 +1,6 @@
 let restaurant;
-var map;
-
-/**
- * Initialize Google map, called from HTML.
- */
-window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-}
+var mapUrl;
+const mapApiKey = "AIzaSyAfn6irkVjamwVeR6wVnRJ7fzL4x2Mhb_8";
 
 /**
  * Get current restaurant from page URL.
@@ -170,6 +152,35 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+fetchRestaurantFromURL((error, restaurant) => {
+  if (error) { // Got an error!
+    console.error(error);
+  } else {
+    fillBreadcrumb();
+
+    const sourceSmall = document.createElement("source");
+    sourceSmall.srcset = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+    sourceSmall.media = "(max-width: 600px)";
+
+    const sourceHigh = document.createElement("source");
+    sourceHigh.srcset = `https://maps.googleapis.com/maps/api/staticmap?size=450x1280&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+    sourceHigh.media = "(min-width: 601px)";
+
+    const image = document.createElement("img");
+    image.setAttribute("id", "map");
+    image.alt = `Map for ${restaurant.name} in ${restaurant.neighborhood}.`;
+    image.src = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+
+    const picture = document.getElementById('map-picture');
+    picture.appendChild(sourceSmall);
+    picture.appendChild(sourceHigh);
+    picture.appendChild(image);
+
+    const cuisine = document.getElementById('restaurant-cuisine');
+    cuisine.innerHTML = restaurant.cuisine_type;
+  }
+});
 
 AppHelper.registerServiceWorker();
 
