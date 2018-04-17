@@ -7,10 +7,12 @@ const mapApiKey = "AIzaSyAfn6irkVjamwVeR6wVnRJ7fzL4x2Mhb_8"
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', (event) => {
+
+document.body.onload = (event) => {
   fetchNeighborhoods();
   fetchCuisines();
-});
+  updateRestaurants();
+}
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -82,7 +84,7 @@ updateRestaurants = () => {
 
   // Using static google maps api to get better performances
   // https://developers.google.com/maps/documentation/static-maps/intro
-  mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&zoom=11&center=40.722216,-73.987501&key=${mapApiKey}&markers=size:mid%7Ccolor:red`
+  mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=1280x200&scale=2&zoom=11&center=40.722216,-73.987501&key=${mapApiKey}&markers=size:mid%7Ccolor:red`
 
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
