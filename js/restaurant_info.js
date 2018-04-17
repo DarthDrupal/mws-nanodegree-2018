@@ -1,5 +1,4 @@
 let restaurant;
-var mapUrl;
 const mapApiKey = "AIzaSyAfn6irkVjamwVeR6wVnRJ7fzL4x2Mhb_8";
 
 /**
@@ -12,18 +11,20 @@ document.body.onload = (event) => {
     } else {
       fillBreadcrumb();
 
+      let mapUrl = `https://maps.googleapis.com/maps/api/staticmap?scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+
       const sourceSmall = document.createElement("source");
-      sourceSmall.srcset = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+      sourceSmall.srcset = `${mapUrl}&size=1280x300`;
       sourceSmall.media = "(max-width: 600px)";
 
       const sourceHigh = document.createElement("source");
-      sourceHigh.srcset = `https://maps.googleapis.com/maps/api/staticmap?size=450x1280&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+      sourceHigh.srcset = `${mapUrl}&size=450x1280`;
       sourceHigh.media = "(min-width: 601px)";
 
       const image = document.createElement("img");
       image.setAttribute("id", "map");
       image.alt = `Map for ${restaurant.name} in ${restaurant.neighborhood}.`;
-      image.src = `https://maps.googleapis.com/maps/api/staticmap?size=1280x300&scale=2&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}&key=${mapApiKey}`;
+      image.src = `${mapUrl}&size=1280x300`;
 
       const picture = document.getElementById('map-picture');
       picture.appendChild(sourceSmall);
