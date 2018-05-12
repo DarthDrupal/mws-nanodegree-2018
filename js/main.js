@@ -152,7 +152,19 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  article.append(more)
+
+  const favorite = document.createElement('a');
+  favorite.innerHTML = 'Favorite';
+  favorite.href = '#';
+  favorite.addEventListener('click', () => {
+    DBHelper.toggleFavoriteRestaurant();
+  });
+
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.append(more);
+  buttonsContainer.append(favorite);
+
+  article.append(buttonsContainer);
 
   return article
 }
@@ -166,3 +178,8 @@ AppHelper.registerServiceWorker();
  * @description Fetch and update all restaurants from the network
  */
 DBHelper.fetchRestaurants();
+
+/**
+ * @description Fetch and update all reviews from the network
+ */
+DBHelper.fetchReviews();

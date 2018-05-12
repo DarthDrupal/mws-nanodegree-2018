@@ -10,7 +10,7 @@ class DBHelper {
   static get DATABASE_URL() {
     const port = 1337; //8887 // Change this to your server port
     //return `http://127.0.0.1:${port}/data/restaurants.json`;
-    return `http://localhost:${port}/restaurants/`;
+    return `http://localhost:${port}/`;
   }
 
   static dbPromise() {
@@ -19,10 +19,14 @@ class DBHelper {
     }
 
     return idb.open('restaurants-db', 4, function (upgradeDb) {
-      var store = upgradeDb.createObjectStore('restaurants', {
+      var storeRestaurants = upgradeDb.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      //store.createIndex('by-date', 'time');
+
+      var storeReviews = upgradeDb.createObjectStore('reviews', {
+        keyPath: 'id'
+      });
+      storeReviews.createIndex('by-restaurant', 'restaurant_id');
     });
   }
 
@@ -30,7 +34,7 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants() {
-    fetch(DBHelper.DATABASE_URL).then((response) => { 
+    fetch(`${DBHelper.DATABASE_URL}restaurants/`).then((response) => {
       return response.json(); 
     }).then((data) => { 
       DBHelper.dbPromise().then((db) => {
@@ -56,6 +60,38 @@ class DBHelper {
       return console.log(`Request failed. Returned status of ${error.status}`);
     });
   }
+
+  /**
+   * Fetch all reviews.
+   */
+  static fetchReviews() {
+    fetch(`${DBHelper.DATABASE_URL}reviews/`).then((response) => {
+      return response.json();
+    }).then((data) => {
+      DBHelper.dbPromise().then((db) => {
+        if (!db) return;
+
+        let tx = db.transaction('reviews', 'readwrite');
+        let store = tx.objectStore('reviews');
+        data.forEach(function (data) {
+          store.put(data);
+        });
+
+        // limit store to 20 items
+        //store.openCursor(null, "prev").then(function (cursor) {
+        //  return cursor.advance(20);
+        //}).then(function deleteRest(cursor) {
+        //  if (!cursor) return;
+        //  cursor.delete();
+        //  return cursor.continue().then(deleteRest);
+        //});
+      });
+      return console.log(data);
+    }).catch((error) => {
+      return console.log(`Request failed. Returned status of ${error.status}`);
+    });
+  }
+
 
   /**
    * 
@@ -194,5 +230,9 @@ class DBHelper {
    */
   static imageUrlForRestaurant(restaurant) {
     return (`/img/${restaurant.id}_30q_50pc.webp`);
+  }
+
+  static toggleFavoriteRestaurant() {
+    alert('franco');
   }
 }
