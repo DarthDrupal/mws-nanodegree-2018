@@ -232,7 +232,26 @@ class DBHelper {
     return (`/img/${restaurant.id}_30q_50pc.webp`);
   }
 
-  static toggleFavoriteRestaurant() {
-    alert('franco');
+  static toggleFavoriteRestaurant(id) {
+    const restaurant = document.getElementById(`restaurant-${id}`)
+    const favorite = restaurant.getAttribute('favorite') == "true";
+    fetch(`${DBHelper.DATABASE_URL}restaurants/${id}/?is_favorite=${!favorite}`, {
+        method: "PUT"
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      console.log(data);
+      DBHelper.dbPromise().then((db) => {
+        if (!db) return;
+
+        let tx = db.transaction('restaurants', 'readwrite');
+        let store = tx.objectStore('restaurants');
+        store.put(data);
+        restaurant.className = `favorite-${data.is_favorite}`;
+        restaurant.setAttribute('favorite', data.is_favorite);
+      });
+    }).catch(function (res) {
+      console.log(res)
+    });
   }
 }

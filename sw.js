@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-restarurants-v01';
+var staticCacheName = 'mws-restarurants-v43';
 
 /**
  * @description Listener to manage the newer version of the cache
@@ -23,6 +23,13 @@ self.addEventListener('activate', function (event) {
  * Source: https://jakearchibald.com/2014/offline-cookbook/#on-network-response
  */
 self.addEventListener('fetch', function (event) {
+  var requestUrl = new URL(event.request.url);
+  console.log(requestUrl.pathname);
+  console.log(requestUrl.origin + ' - ' + location.origin);
+  if (requestUrl.pathname.startsWith('/restaurants') || requestUrl.pathname.startsWith('/reviews')) {
+    return;
+  }
+
   event.respondWith(
     caches.open(staticCacheName).then(function (cache) {
       return cache.match(event.request).then(function (response) {

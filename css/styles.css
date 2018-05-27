@@ -94,7 +94,15 @@ header h1 a {
   margin: 0;
   font-size: 11pt;
 }
-#restaurants-list article a {
+.favorite-true {
+  color: lightgreen;
+  font-size: 30pt;
+}
+.favorite-false {
+  color: black;
+  font-size: 30pt;
+}
+#restaurants-list article a.details {
   /*background-color: darkorange;*/
   background-color: #DC143C;
   border-bottom: 3px solid #eee;

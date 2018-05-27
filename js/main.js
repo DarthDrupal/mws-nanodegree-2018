@@ -151,14 +151,22 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
+  more.className = 'details';
   more.href = DBHelper.urlForRestaurant(restaurant);
 
   const favorite = document.createElement('a');
-  favorite.innerHTML = 'Favorite';
-  favorite.href = '#';
+  const favoriteImg = document.createElement('img');
+  favorite.id = `restaurant-${restaurant.id}`;
+  favorite.innerHTML = '★';
+  favorite.className = `favorite-${restaurant.is_favorite}`;
+  favorite.setAttribute('favorite', restaurant.is_favorite);
+  favorite.href = 'javascript:void(0)';
   favorite.addEventListener('click', () => {
-    DBHelper.toggleFavoriteRestaurant();
+    DBHelper.toggleFavoriteRestaurant(restaurant.id);
   });
+
+  //favoriteImg.src = '/img/star.png';
+  //favorite.append(favoriteImg);
 
   const buttonsContainer = document.createElement('div');
   buttonsContainer.append(more);
