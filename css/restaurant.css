@@ -120,6 +120,15 @@ header h1 a {
   padding: 40px 30px;
   width: 100%;
 }
+.favorite-true {
+  color: lightgreen;
+  font-size: 30pt;
+}
+
+.favorite-false {
+  color: black;
+  font-size: 30pt;
+}
 #reviews-container {
   padding: 30px 40px 80px;
 }

@@ -91,6 +91,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
+
+  // fill favorite toggle element
+  fillFavoriteHTML();
+
   // fill reviews
   fillReviewsHTML();
 }
@@ -113,6 +117,20 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
     hours.appendChild(row);
   }
+}
+
+/**
+ * Create favorite toggle
+ */
+fillFavoriteHTML = (restaurant = self.restaurant) => {
+  const favorite = document.getElementById('favorite-toggle');
+
+  favorite.id = `restaurant-${restaurant.id}`;
+  favorite.className = `favorite-${restaurant.is_favorite}`;
+  favorite.setAttribute('favorite', restaurant.is_favorite);
+  favorite.addEventListener('click', () => {
+    DBHelper.toggleFavoriteRestaurant(restaurant.id);
+  });
 }
 
 /**
