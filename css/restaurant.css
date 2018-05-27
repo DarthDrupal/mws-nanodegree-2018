@@ -129,6 +129,10 @@ header h1 a {
   color: black;
   font-size: 30pt;
 }
+#details-container {
+  display: flex;
+  flex-wrap: wrap;
+} 
 #reviews-container {
   padding: 30px 40px 80px;
 }
