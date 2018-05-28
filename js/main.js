@@ -186,8 +186,3 @@ AppHelper.registerServiceWorker();
  * @description Fetch and update all restaurants from the network
  */
 DBHelper.fetchRestaurants();
-
-/**
- * @description Fetch and update all reviews from the network
- */
-DBHelper.fetchReviews();
