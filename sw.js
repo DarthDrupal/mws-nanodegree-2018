@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-restarurants-96';
+var staticCacheName = 'mws-restarurants-08';
 
 /**
  * @description Listener to manage the newer version of the cache

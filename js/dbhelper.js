@@ -24,9 +24,11 @@ class DBHelper {
       });
 
       var storeReviews = upgradeDb.createObjectStore('reviews', {
-        keyPath: 'id'
+        keyPath: 'local_id',
+        autoIncrement: true
       });
       storeReviews.createIndex('by-restaurant', 'restaurant_id', {unique: false});
+      storeReviews.createIndex('by-serverid', 'id');
     });
   }
 
@@ -170,10 +172,22 @@ class DBHelper {
       DBHelper.dbPromise().then((db) => {
         if (!db) return;
 
-        let tx = db.transaction('reviews', 'readwrite');
-        let store = tx.objectStore('reviews');
+        const tx = db.transaction('reviews', 'readwrite');
+        const store = tx.objectStore('reviews');
+        const storeIndex = store.index('by-serverid');
         data.forEach(function (data) {
-          store.put(data);
+          // Save the review in the db using its local id if present
+          // otherwise create a new record.
+          storeIndex.get(parseInt(data.id))
+            .then((review) => {
+              console.log(`Review present: ${review.local_id}`);
+              data.local_id = review.local_id;
+              store.put(data);
+            })
+            .catch((error) => {
+              console.log(`Review new: ${data.id}`);
+              store.put(data);
+            });
         });
       });
       return console.log(data);
