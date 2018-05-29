@@ -128,6 +128,8 @@ fillFavoriteHTML = (restaurant = self.restaurant) => {
   favorite.id = `restaurant-${restaurant.id}`;
   favorite.className = `favorite-${restaurant.is_favorite}`;
   favorite.setAttribute('favorite', restaurant.is_favorite);
+  const isFavoriteBool = restaurant.is_favorite == "true";
+  favorite.innerHTML = (isFavoriteBool) ? '✭' : '✩';
   favorite.addEventListener('click', () => {
     DBHelper.toggleFavoriteRestaurant(restaurant.id);
   });

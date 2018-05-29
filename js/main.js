@@ -157,7 +157,8 @@ createRestaurantHTML = (restaurant) => {
   const favorite = document.createElement('a');
   const favoriteImg = document.createElement('img');
   favorite.id = `restaurant-${restaurant.id}`;
-  favorite.innerHTML = '★';
+  const isFavoriteBool = restaurant.is_favorite == "true";
+  favorite.innerHTML = (isFavoriteBool) ? '✭' : '✩';
   favorite.className = `favorite-${restaurant.is_favorite}`;
   favorite.setAttribute('favorite', restaurant.is_favorite);
   favorite.href = 'javascript:void(0)';

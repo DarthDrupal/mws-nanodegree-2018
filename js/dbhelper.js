@@ -263,6 +263,8 @@ class DBHelper {
         store.put(data);
         restaurant.className = `favorite-${data.is_favorite}`;
         restaurant.setAttribute('favorite', data.is_favorite);
+        const favorite = data.is_favorite == "true";
+        restaurant.innerHTML = (favorite) ? "✭" : "✩";
       });
     }).catch(function (res) {
       console.log(res)
