@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-restarurants-08';
+var staticCacheName = 'mws-restarurants-30';
 
 /**
  * @description Listener to manage the newer version of the cache
@@ -40,6 +40,19 @@ self.addEventListener('fetch', function (event) {
       });
     })
   );
+});
+
+self.addEventListener('sync', event => {
+  console.log("Good lord, a sync event");
+  event.waitUntil(() => {
+    fetch(`https://jsonplaceholder.typicode.com/posts/1`).then((response) => {
+      return response.json();
+    }).then((data) => {
+      console.log(data);
+    }).catch((error) => {
+      return console.log(`Request failed. Returned status of ${error.status}`);
+    })
+  });
 });
 
 self.addEventListener('message', function (event) {
