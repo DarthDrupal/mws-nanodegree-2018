@@ -27,6 +27,8 @@ class DBHelper {
         keyPath: 'local_id',
         autoIncrement: true
       });
+
+      storeRestaurants.createIndex('needs-sync', 'needs_sync', {unique: false});
       storeReviews.createIndex('by-restaurant', 'restaurant_id', {unique: false});
       storeReviews.createIndex('by-serverid', 'id');
     });
@@ -247,33 +249,31 @@ class DBHelper {
   }
 
   static toggleFavoriteRestaurant(id) {
-    navigator.serviceWorker.ready.then(function (reg) {
-      reg.sync.register('franco-tag').then(() => {
-        console.log('Registered sync');
-      });
-    });
+    DBHelper.dbPromise().then((db) => {
+      if (!db) return;
 
-    const restaurant = document.getElementById(`restaurant-${id}`)
-    const favorite = restaurant.getAttribute('favorite') == "true";
-    fetch(`${DBHelper.DATABASE_URL}restaurants/${id}/?is_favorite=${!favorite}`, {
-        method: "PUT"
-    }).then((res) => {
-      return res.json();
-    }).then((data) => {
-      console.log(data);
-      DBHelper.dbPromise().then((db) => {
-        if (!db) return;
+      let tx = db.transaction('restaurants', 'readwrite');
+      let store = tx.objectStore('restaurants');
 
-        let tx = db.transaction('restaurants', 'readwrite');
-        let store = tx.objectStore('restaurants');
-        store.put(data);
-        restaurant.className = `favorite-${data.is_favorite}`;
-        restaurant.setAttribute('favorite', data.is_favorite);
-        const favorite = data.is_favorite == "true";
-        restaurant.innerHTML = (favorite) ? "✭" : "✩";
-      });
-    }).catch(function (res) {
-      console.log(res)
+      store.get(parseInt(id)).then((restaurant) => {
+        const restaurantHTML = document.getElementById(`restaurant-${id}`)
+        const favorite = restaurantHTML.getAttribute('favorite') == "true";
+
+        restaurant.is_favorite = !favorite;
+        restaurant.needs_sync = 1;
+
+        store.put(restaurant);
+
+        restaurantHTML.className = `favorite-${restaurant.is_favorite}`;
+        restaurantHTML.setAttribute('favorite', restaurant.is_favorite);
+        restaurantHTML.innerHTML = (restaurant.is_favorite) ? "✭" : "✩";
+
+        navigator.serviceWorker.ready.then(function (reg) {
+          reg.sync.register('sync-favorite').then(() => {
+            console.log('Registered sync');
+          });
+        });
+      })
     });
   }
 }
