@@ -1,4 +1,12 @@
-var staticCacheName = 'mws-restarurants-30';
+var staticCacheName = 'mws-restarurants-35';
+
+function testdellaceppa() {
+  return fetch(`https://jsonplaceholder.typicode.com/posts/1`);
+}
+
+function testdifranco() {
+  return fetch(`https://jsonplaceholder.typicode.com/posts/3`);
+}
 
 /**
  * @description Listener to manage the newer version of the cache
@@ -43,16 +51,24 @@ self.addEventListener('fetch', function (event) {
 });
 
 self.addEventListener('sync', event => {
-  console.log("Good lord, a sync event");
-  event.waitUntil(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/1`).then((response) => {
+  if (event.tag == 'tag-name') {
+    console.log("Good lord, a sync event");
+    event.waitUntil(testdellaceppa().then((response) => {
+      console.log('Test di giuseppe');
       return response.json();
     }).then((data) => {
-      console.log(data);
-    }).catch((error) => {
-      return console.log(`Request failed. Returned status of ${error.status}`);
-    })
-  });
+      console.log('giuseppe data: ' + JSON.stringify(data));
+    }));
+  }
+
+  if (event.tag == 'franco-tag') {
+    event.waitUntil(testdifranco().then((response) => {
+      console.log('Test di franco');
+      return response.json();
+    }).then((data) => {
+      console.log('franco data: ' + JSON.stringify(data));
+    }));
+  }
 });
 
 self.addEventListener('message', function (event) {

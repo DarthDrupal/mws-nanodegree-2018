@@ -247,6 +247,12 @@ class DBHelper {
   }
 
   static toggleFavoriteRestaurant(id) {
+    navigator.serviceWorker.ready.then(function (reg) {
+      reg.sync.register('franco-tag').then(() => {
+        console.log('Registered sync');
+      });
+    });
+
     const restaurant = document.getElementById(`restaurant-${id}`)
     const favorite = restaurant.getAttribute('favorite') == "true";
     fetch(`${DBHelper.DATABASE_URL}restaurants/${id}/?is_favorite=${!favorite}`, {
