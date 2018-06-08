@@ -102,20 +102,23 @@ class DBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    DBHelper.fetchReviewsByRestaurantId(id);
-    // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurantsFromDb(id, (error, restaurants, reviews) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        restaurant.reviews = reviews;
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
+    Promise.all([
+      DBHelper.fetchReviewsByRestaurantId(id)
+    ]).then(() => {
+      // fetch all restaurants with proper error handling.
+      DBHelper.fetchRestaurantsFromDb(id, (error, restaurants, reviews) => {
+        if (error) {
+          callback(error, null);
+        } else {
+          const restaurant = restaurants.find(r => r.id == id);
+          restaurant.reviews = reviews;
+          if (restaurant) { // Got the restaurant
+            callback(null, restaurant);
+          } else { // Restaurant does not exist in the database
+            callback('Restaurant does not exist', null);
+          }
         }
-      }
+      });
     });
   }
 
@@ -176,7 +179,7 @@ class DBHelper {
    * Fetch all reviews by restaurant id
    */
   static fetchReviewsByRestaurantId(id) {
-    fetch(`${DBHelper.DATABASE_URL}reviews/?restaurant_id=${id}`).then((response) => {
+    return fetch(`${DBHelper.DATABASE_URL}reviews/?restaurant_id=${id}`).then((response) => {
       return response.json();
     }).then((data) => {
       DBHelper.dbPromise().then((db) => {

@@ -1,7 +1,7 @@
 importScripts('/js/idb.js');
 importScripts('/js/dbhelper.js');
 
-var staticCacheName = 'mws-restarurants-57';
+var staticCacheName = 'mws-restarurants-60';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
