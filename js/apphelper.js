@@ -28,12 +28,6 @@ class AppHelper {
       reg.addEventListener('updatefound', function () {
         AppHelper.trackInstalling(reg.installing);
       });
-
-      navigator.serviceWorker.ready.then(function (reg) {
-        reg.sync.register('tag-name').then(() => {
-          console.log('Registered sync');
-        });
-      });
     });
 
     // Ensure refresh is only called once.

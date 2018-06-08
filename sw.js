@@ -1,35 +1,31 @@
 importScripts('/js/idb.js');
 importScripts('/js/dbhelper.js');
 
-var staticCacheName = 'mws-restarurants-52';
-
-function testdellaceppa() {
-  return fetch(`https://jsonplaceholder.typicode.com/posts/1`);
-}
-
-function testdifranco() {
-  return fetch(`https://jsonplaceholder.typicode.com/posts/3`);
-}
+var staticCacheName = 'mws-restarurants-57';
 
 function syncFavorite() {
-  idb.open('restaurants-db', 4).then((db) => {
-    if (!db) return;
+  return new Promise(function (resolve, reject) {
+    idb.open('restaurants-db', 4).then((db) => {
+      if (!db) return;
+      const tx = db.transaction('restaurants', 'readwrite');
+      const store = tx.objectStore('restaurants');
+      const storeIndex = store.index('needs-sync');
 
-    const tx = db.transaction('restaurants', 'readwrite');
-    const store = tx.objectStore('restaurants');
-    const storeIndex = store.index('needs-sync');
-
-    storeIndex.getAll(1).then(function (restaurants) {
-      restaurants.forEach(function (restaurant) {
-        fetch(`${DBHelper.DATABASE_URL}restaurants/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
-          method: "PUT"
-        }).then(function (response) {
-          return response.json();
-        }).then(function (data) {
-          const tx = db.transaction('restaurants', 'readwrite');
-          const store = tx.objectStore('restaurants');
-          data.needs_sync = 0;
-          store.put(data);
+      storeIndex.getAll(1).then(function (restaurants) {
+        restaurants.forEach(function (restaurant) {
+          fetch(`${DBHelper.DATABASE_URL}restaurants/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
+            method: "PUT"
+          }).then(function (response) {
+            return response.json();
+          }).then(function (data) {
+            const tx = db.transaction('restaurants', 'readwrite');
+            const store = tx.objectStore('restaurants');
+            data.needs_sync = 0;
+            store.put(data);
+            resolve('synced');
+          }).catch(function (error) {
+            reject(error);
+          });
         });
       });
     });
@@ -79,25 +75,6 @@ self.addEventListener('fetch', function (event) {
 });
 
 self.addEventListener('sync', event => {
-  if (event.tag == 'tag-name') {
-    console.log("Good lord, a sync event");
-    event.waitUntil(testdellaceppa().then((response) => {
-      console.log('Test di giuseppe');
-      return response.json();
-    }).then((data) => {
-      console.log('giuseppe data: ' + JSON.stringify(data));
-    }));
-  }
-
-  if (event.tag == 'franco-tag') {
-    event.waitUntil(testdifranco().then((response) => {
-      console.log('Test di franco');
-      return response.json();
-    }).then((data) => {
-      console.log('franco data: ' + JSON.stringify(data));
-    }));
-  }
-
   if (event.tag == 'sync-favorite') {
     event.waitUntil(syncFavorite());
   }

@@ -47,7 +47,16 @@ class DBHelper {
         let tx = db.transaction('restaurants', 'readwrite');
         let store = tx.objectStore('restaurants');
         data.forEach(function (data) {
-          store.put(data);
+          // Look in the database if the current restaurant
+          // needs to be updated, if so don't overwrite it.
+          // Otherwise save it as a new one.
+          store.get(parseInt(data.id)).then((restaurant) => {
+            if (!restaurant.needs_sync) {
+              store.put(data);
+            }
+          }).catch((error) => {
+            store.put(data);
+          });
         });
 
         // limit store to 20 items
@@ -70,7 +79,6 @@ class DBHelper {
    * @description Get restaurants from db
    */
   static fetchRestaurantsFromDb(id, callback) {
-    console.log('ID: ' + id);
     return DBHelper.dbPromise().then(function (db) {
       if (!db) return;
 
@@ -182,12 +190,10 @@ class DBHelper {
           // otherwise create a new record.
           storeIndex.get(parseInt(data.id))
             .then((review) => {
-              console.log(`Review present: ${review.local_id}`);
               data.local_id = review.local_id;
               store.put(data);
             })
             .catch((error) => {
-              console.log(`Review new: ${data.id}`);
               store.put(data);
             });
         });
