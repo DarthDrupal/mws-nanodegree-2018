@@ -94,23 +94,15 @@ header h1 a {
   margin: 0;
   font-size: 11pt;
 }
-.favorite-true {
-  color: lightgreen;
-  font-size: 30pt;
-}
-.favorite-false {
-  color: black;
-  font-size: 30pt;
-}
-#restaurants-list article a.details {
+#restaurants-list article a {
   /*background-color: darkorange;*/
   background-color: #DC143C;
   border-bottom: 3px solid #eee;
   color: #fff;
   display: inline-block;
-  font-size: 10pt;
-  margin: 15px 20px 0 0;
-  padding: 8px 30px 10px;
+  font-size: 12pt;
+  margin: 15px 10px 0 0;
+  padding: 8px 15px 10px;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
