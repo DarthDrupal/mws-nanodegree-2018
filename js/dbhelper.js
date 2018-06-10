@@ -268,14 +268,14 @@ class DBHelper {
         const restaurantHTML = document.getElementById(`restaurant-${id}`)
         const favorite = restaurantHTML.getAttribute('favorite') == "true";
 
-        restaurant.is_favorite = !favorite;
+        restaurantHTML.className = `favorite-${!favorite}`;
+        restaurantHTML.setAttribute('favorite', !favorite);
+        restaurantHTML.innerHTML = (!favorite) ? "✭" : "✩";
+
+        restaurant.is_favorite = String(!favorite);
         restaurant.needs_sync = 1;
 
         store.put(restaurant);
-
-        restaurantHTML.className = `favorite-${restaurant.is_favorite}`;
-        restaurantHTML.setAttribute('favorite', restaurant.is_favorite);
-        restaurantHTML.innerHTML = (restaurant.is_favorite) ? "✭" : "✩";
 
         navigator.serviceWorker.ready.then(function (reg) {
           reg.sync.register('sync-favorite').then(() => {
