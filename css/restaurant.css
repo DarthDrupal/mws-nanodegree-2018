@@ -167,7 +167,17 @@ header h1 a {
 #restaurant-hours td {
   color: #666;
 }
-
+#add-review-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+#add-review-form input, label, textarea {
+  width: 100%;
+  margin: 0 0 10px;
+}
+#add-review-form label {
+  margin: 0;
+}
 /* =============== Media queries breakpoints =============== */
 
 @media screen and (max-width: 600px) {

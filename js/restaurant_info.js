@@ -155,6 +155,94 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     div.appendChild(createReviewHTML(review));
   });
   container.appendChild(div);
+
+  const titleForm = document.createElement('h3');
+  titleForm.innerHTML = 'Add Review';
+
+  const form = document.createElement('form');
+  form.id = 'add-review-form';
+  form.setAttribute('onsubmit', 'return doSomething();');
+  form.action = 'javascript:void(0)';
+
+  const labelName = document.createElement('label');
+  labelName.setAttribute('for', 'name');
+  labelName.innerHTML = 'Name';
+
+  const inputName = document.createElement('input');
+  inputName.type = 'text';
+  inputName.id = 'name';
+  inputName.placeholder = 'Type your Name';
+
+  const labelRating = document.createElement('label');
+  labelRating.setAttribute('for', 'rating');
+  labelRating.innerHTML = 'Rating';
+
+  const datalist = document.createElement('datalist');
+  datalist.id = 'tickmarks';
+
+  const option1 = document.createElement('option');
+  option1.value = '1';
+  option1.label = '1';
+
+  const option2 = document.createElement('option');
+  option2.value = '2';
+  option2.label = '2';
+
+  const option3 = document.createElement('option');
+  option3.value = '3';
+  option3.label = '3';
+
+  const option4 = document.createElement('option');
+  option4.value = '4';
+  option4.label = '4';
+
+  const option5 = document.createElement('option');
+  option5.value = '5';
+  option5.label = '5';
+
+  datalist.appendChild(option1);
+  datalist.appendChild(option2);
+  datalist.appendChild(option3);
+  datalist.appendChild(option4);
+  datalist.appendChild(option5);
+
+  const inputRating = document.createElement('input');
+  inputRating.type = 'range';
+  inputRating.id = 'rating';
+  inputRating.min = '1';
+  inputRating.max = '5';
+  inputRating.step = '1';
+  inputRating.setAttribute('list', 'tickmarks');
+
+  const labelComments = document.createElement('label');
+  labelComments.setAttribute('for', 'comments');
+  labelComments.innerHTML = 'Comments';
+
+  const inputComments = document.createElement('textarea');
+  inputComments.form = 'add-review-form';
+  inputComments.id = 'comments';
+  inputComments.placeholder = 'Write your review';
+  inputComments.rows = '4';
+  inputComments.cols = '50';
+
+  const inputSubmit = document.createElement('input');
+  inputSubmit.type = 'submit';
+
+  form.appendChild(labelName);
+  form.appendChild(inputName);
+  form.appendChild(labelRating);
+  form.appendChild(inputRating);
+  form.appendChild(datalist);
+  form.appendChild(labelComments);
+  form.appendChild(inputComments);
+  form.appendChild(inputSubmit);
+
+  container.appendChild(titleForm);
+  container.appendChild(form);
+}
+
+doSomething = () => {
+  alert('FrancoGiuseppe: ' + document.getElementById('add-review-form').rating.value);
 }
 
 /**
