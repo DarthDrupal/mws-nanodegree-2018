@@ -279,10 +279,39 @@ class DBHelper {
 
         navigator.serviceWorker.ready.then(function (reg) {
           reg.sync.register('sync-favorite').then(() => {
-            console.log('Registered sync');
+            console.log('Registered sync favorites');
           });
         });
       })
+    });
+  }
+
+  static addRestaurantReview(id, form) {
+    const data = {
+      'id': '',
+      'restaurant_id': id,
+      'comments': form.comments.value,
+      'createdAt': Date.now(),
+      'updatedAt': Date.now(),
+      'name': form.name.value,
+      'rating': form.rating.value
+    };
+
+    console.log('Form Data: ' + JSON.stringify(data));
+
+    DBHelper.dbPromise().then((db) => {
+      if (!db) return;
+
+      let tx = db.transaction('reviews', 'readwrite');
+      let store = tx.objectStore('reviews');
+
+      store.put(data);
+
+      navigator.serviceWorker.ready.then(function (reg) {
+        reg.sync.register('sync-reviews').then(() => {
+          console.log('Registered sync reviews');
+        });
+      });
     });
   }
 }

@@ -161,7 +161,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 
   const form = document.createElement('form');
   form.id = 'add-review-form';
-  form.setAttribute('onsubmit', 'return doSomething();');
+  form.setAttribute('onsubmit', 'return addReview(self.restaurant.id);');
   form.action = 'javascript:void(0)';
 
   const labelName = document.createElement('label');
@@ -241,8 +241,10 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   container.appendChild(form);
 }
 
-doSomething = () => {
-  alert('FrancoGiuseppe: ' + document.getElementById('add-review-form').rating.value);
+addReview = (id) => {
+  console.log('Restautant ID: ' + id);
+  form = document.getElementById('add-review-form');
+  DBHelper.addRestaurantReview(id, form);
 }
 
 /**

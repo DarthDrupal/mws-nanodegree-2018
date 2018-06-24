@@ -1,7 +1,7 @@
 importScripts('/js/idb.js');
 importScripts('/js/dbhelper.js');
 
-var staticCacheName = 'mws-restarurants-94';
+var staticCacheName = 'mws-restarurants-12';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -23,6 +23,38 @@ function syncFavorite() {
             data.needs_sync = 0;
             store.put(data);
             resolve('synced');
+          }).catch(function (error) {
+            reject(error);
+          });
+        });
+      });
+    });
+  });
+}
+
+function syncReviews() {
+  return new Promise(function (resolve, reject) {
+    idb.open('restaurants-db', 4).then((db) => {
+      if (!db) return;
+      const tx = db.transaction('reviews', 'readwrite');
+      const store = tx.objectStore('reviews');
+      const storeIndex = store.index('by-serverid');
+
+      storeIndex.getAll('').then(function (reviews) {
+        console.log('Reviews: ' + JSON.stringify(reviews));
+        reviews.forEach(function (review) {
+          fetch(`${DBHelper.DATABASE_URL}reviews/`, {
+            method: "POST",
+            body: JSON.stringify(review)
+          }).then(function (response) {
+            return response.json();
+          }).then(function (data) {
+            const tx = db.transaction('reviews', 'readwrite');
+            const store = tx.objectStore('reviews');
+            store.get(review.local_id).then((review) => {
+              store.put(data);
+              resolve('synced');
+            })
           }).catch(function (error) {
             reject(error);
           });
@@ -77,6 +109,10 @@ self.addEventListener('fetch', function (event) {
 self.addEventListener('sync', event => {
   if (event.tag == 'sync-favorite') {
     event.waitUntil(syncFavorite());
+  }
+
+  if (event.tag == 'sync-reviews') {
+    event.waitUntil(syncReviews());
   }
 });
 
