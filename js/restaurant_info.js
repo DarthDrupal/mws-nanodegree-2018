@@ -140,6 +140,7 @@ fillFavoriteHTML = (restaurant = self.restaurant) => {
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
+  container.innerHTML = '';
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
@@ -150,7 +151,8 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  const div = document.getElementById('reviews-list');
+  const div = document.createElement('div');
+  div.id = 'reviews-list';
   reviews.forEach(review => {
     div.appendChild(createReviewHTML(review));
   });
@@ -169,6 +171,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   labelName.innerHTML = 'Name';
 
   const inputName = document.createElement('input');
+  inputName.required = true;
   inputName.type = 'text';
   inputName.id = 'name';
   inputName.placeholder = 'Type your Name';
@@ -219,6 +222,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   labelComments.innerHTML = 'Comments';
 
   const inputComments = document.createElement('textarea');
+  inputComments.required = true;
   inputComments.form = 'add-review-form';
   inputComments.id = 'comments';
   inputComments.placeholder = 'Write your review';
@@ -245,6 +249,14 @@ addReview = (id) => {
   console.log('Restautant ID: ' + id);
   form = document.getElementById('add-review-form');
   DBHelper.addRestaurantReview(id, form);
+  DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+    self.restaurant = restaurant;
+    if (!restaurant) {
+      console.error(error);
+      return;
+    }
+    fillReviewsHTML();
+  });
 }
 
 /**

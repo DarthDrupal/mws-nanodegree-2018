@@ -1,7 +1,7 @@
 importScripts('/js/idb.js');
 importScripts('/js/dbhelper.js');
 
-var staticCacheName = 'mws-restarurants-12';
+var staticCacheName = 'mws-restarurants-40';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -52,6 +52,7 @@ function syncReviews() {
             const tx = db.transaction('reviews', 'readwrite');
             const store = tx.objectStore('reviews');
             store.get(review.local_id).then((review) => {
+              data.local_id = review.local_id;
               store.put(data);
               resolve('synced');
             })
