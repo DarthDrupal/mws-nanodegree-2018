@@ -166,6 +166,9 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   form.setAttribute('onsubmit', 'return addReview(self.restaurant.id);');
   form.action = 'javascript:void(0)';
 
+  const nameContainer = document.createElement('div');
+  nameContainer.id = 'inputname-container';
+
   const labelName = document.createElement('label');
   labelName.setAttribute('for', 'name');
   labelName.innerHTML = 'Name';
@@ -175,6 +178,12 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   inputName.type = 'text';
   inputName.id = 'name';
   inputName.placeholder = 'Type your Name';
+
+  nameContainer.appendChild(labelName);
+  nameContainer.appendChild(inputName);
+
+  const ratingContainer = document.createElement('div');
+  ratingContainer.id = 'rating-container';
 
   const labelRating = document.createElement('label');
   labelRating.setAttribute('for', 'rating');
@@ -217,6 +226,12 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   inputRating.step = '1';
   inputRating.setAttribute('list', 'tickmarks');
 
+  ratingContainer.appendChild(labelRating);
+  ratingContainer.appendChild(inputRating);
+
+  const commentsContainer = document.createElement('div');
+  commentsContainer.id = 'comments-container';
+
   const labelComments = document.createElement('label');
   labelComments.setAttribute('for', 'comments');
   labelComments.innerHTML = 'Comments';
@@ -229,16 +244,17 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   inputComments.rows = '4';
   inputComments.cols = '50';
 
+  commentsContainer.appendChild(labelComments);
+  commentsContainer.appendChild(inputComments);
+
   const inputSubmit = document.createElement('input');
+  inputSubmit.id = 'review-submit-button';
   inputSubmit.type = 'submit';
 
-  form.appendChild(labelName);
-  form.appendChild(inputName);
-  form.appendChild(labelRating);
-  form.appendChild(inputRating);
+  form.appendChild(nameContainer);
+  form.appendChild(ratingContainer);
   form.appendChild(datalist);
-  form.appendChild(labelComments);
-  form.appendChild(inputComments);
+  form.appendChild(commentsContainer);
   form.appendChild(inputSubmit);
 
   container.appendChild(titleForm);
